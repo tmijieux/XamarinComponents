@@ -1,18 +1,20 @@
-#addin nuget:?package=Cake.XCode&version=4.2.0
-#addin nuget:?package=Cake.Xamarin.Build&version=4.1.2
+#addin nuget:?package=Cake.XCode&version=5.0.0
+// #addin nuget:?package=Cake.Xamarin.Build&version=4.1.2
+#addin nuget:?package=Cake.Xamarin&version=4.0.0
 #addin nuget:?package=Cake.FileHelpers&version=3.2.1
 
 var TARGET = Argument ("t", Argument ("target", "ci"));
 
-var ANDROID_VERSION = "0.9.0";
-var ANDROID_NUGET_VERSION = "0.9.0";
-var IOS_VERSION = "0.92.0";
-var IOS_NUGET_VERSION = "0.92.0";
+var ANDROID_VERSION = "0.11.1";
+var ANDROID_NUGET_VERSION = "0.11.1-alpha.1";
+
+var IOS_VERSION = "1.6.2";
+var IOS_NUGET_VERSION = "1.6.2-alpha.2";
 
 var AAR_URL = $"https://repo1.maven.org/maven2/net/openid/appauth/{ANDROID_VERSION}/appauth-{ANDROID_VERSION}.aar";
 
 var PODFILE = new List<string> {
-	"platform :ios, '8.0'",
+	"platform :ios, '9.0'",
 	"install! 'cocoapods', :integrate_targets => false",
 	"target 'Xamarin' do",
 	string.Format ("  pod 'AppAuth', '{0}'", IOS_VERSION),
@@ -21,7 +23,7 @@ var PODFILE = new List<string> {
 
 Task("externals-ios")
 	.WithCriteria(IsRunningOnUnix())
-	.WithCriteria(!FileExists("./externals/ios/libAppAuth.a"))
+	//.WithCriteria(!FileExists("./externals/ios/libAppAuth.a"))
 	.Does(() => 
 {
 	EnsureDirectoryExists ("./externals/ios");
@@ -31,26 +33,58 @@ Task("externals-ios")
 	CocoaPodInstall("./externals/ios", new CocoaPodInstallSettings { NoIntegrate = true });
 
 	XCodeBuild(new XCodeBuildSettings {
+                Clean=true,
 		Project = "./externals/ios/Pods/Pods.xcodeproj",
-		Target = "AppAuth",
+		Scheme = "AppAuth",
+                Archive = true,
+                ArchivePath = "./externals/ios/archives/my_archive_device.xcarchive",
 		Sdk = "iphoneos",
 		Configuration = "Release",
+                SkipUnavailableActions = false,
+                BuildSettings=  new Dictionary<string,string> {
+                    {"SKIP_INSTALL","NO"}
+                },
 	});
-
 	XCodeBuild(new XCodeBuildSettings {
+                Clean=true,
 		Project = "./externals/ios/Pods/Pods.xcodeproj",
-		Target = "AppAuth",
+		Scheme = "AppAuth",
+                Archive = true,
+                ArchivePath = "./externals/ios/archives/my_archive_simulators.xcarchive",
 		Sdk = "iphonesimulator",
 		Configuration = "Release",
+                SkipUnavailableActions = false,
+                BuildSettings=  new Dictionary<string,string> {
+                    {"SKIP_INSTALL","NO"},
+                    {"ONLY_ACTIVE_ARCH","NO"},
+                    {"ARCHS","x86_64"},
+                },
 	});
 
-	
-	// RunLipoCreate("./", 
-	// 	"./externals/ios/libAppAuth.a",
-	// 	"./externals/ios/build/Release-iphoneos/AppAuth/libAppAuth.a",
-	// 	"./externals/ios/build/Release-iphonesimulator/AppAuth/libAppAuth.a");
-	
-	CopyFile("./externals/ios/build/Release-iphonesimulator/AppAuth/libAppAuth.a", "./externals/ios/libAppAuth.a");
+        // https://developer.apple.com/documentation/xcode/creating-a-multi-platform-binary-framework-bundle
+        // says: Avoid using tools such as lipo to combine architecture slices built for iOS and iOS Simulator into a single binary. 
+
+        var lipoExitCode = StartProcess("lipo", new ProcessSettings {
+            Arguments = new ProcessArgumentBuilder()
+                .Append("-create")
+                .Append("./externals/ios/archives/my_archive_device.xcarchive/Products/usr/local/lib/libAppAuth.a")
+                .Append("./externals/ios/archives/my_archive_simulators.xcarchive/Products/usr/local/lib/libAppAuth.a")
+                .Append("-output").Append("./externals/ios/libAppAuth.a")
+                });
+        if (lipoExitCode != 0) {
+            throw new Exception($"lipo failed with exit code {lipoExitCode}");
+        }
+        //StartProcess("xcodebuild", new ProcessSettings {
+        //    Arguments = new ProcessArgumentBuilder()
+        //        .Append("-create-xcframework")
+        //        .Append("-archive").Append("./externals/ios/archives/my_archive_device.xcarchive")
+        //        .Append("-library").Append("libAppAuth.a")
+        //        .Append("-archive").Append("./externals/ios/archives/my_archive_simulators.xcarchive")
+        //        .Append("-library").Append("libAppAuth.a")
+        //        .Append("-output").Append("./externals/ios/frameworks/AppAuth.xcframework")
+        //        });
+
+
 
 	XmlPoke("./iOS/source/OpenId.AppAuth.iOS/OpenId.AppAuth.iOS.csproj", "/Project/PropertyGroup/PackageVersion", IOS_NUGET_VERSION);
 });
