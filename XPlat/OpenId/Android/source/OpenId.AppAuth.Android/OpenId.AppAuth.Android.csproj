@@ -15,21 +15,23 @@
     </PropertyGroup>
     
     <PropertyGroup>
-        <PackageId>Xamarin.OpenId.AppAuth.Android</PackageId>
+        <PackageId>TMijieux.Xamarin.OpenId.AppAuth.Android</PackageId>
         <Title>OpenID AppAuth (OAuth Client) for Android</Title>
         <PackageDescription>
             AppAuth for Android is a client SDK for communicating with OAuth 2.0 and OpenID Connect providers.
             It strives to directly map the requests and responses of those specifications, while following the idiomatic style of the implementation language.
             In addition to mapping the raw protocol flows, convenience methods are available to assist with common tasks like performing an action with fresh tokens.
         </PackageDescription>
-        <Authors>Microsoft</Authors>
+        <Authors>Microsoft, Thomas Mijieux</Authors>
         <Owners>Microsoft</Owners>
         <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
-        <PackageIconUrl>https://raw.githubusercontent.com/xamarin/XamarinComponents/master/XPlat/OpenId/images/logo_128x128.png</PackageIconUrl>
-        <PackageProjectUrl>https://go.microsoft.com/fwlink/?linkid=865038</PackageProjectUrl>
-        <PackageLicenseUrl>https://go.microsoft.com/fwlink/?linkid=864980</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/tmijieux/XamarinComponents/tree/main/XPlat/OpenId</PackageProjectUrl>
+        <PackageRepoUrl>https://github.com/tmijieux/XamarinComponents/tree/main/XPlat/OpenId</PackageRepoUrl>
+        <PackageLicenseFile>License.md</PackageLicenseFile>
+        <PackageReadmeFile>Readme.md</PackageReadmeFile>
+        <PackageIcon>logo_128x128.png</PackageIcon>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <PackageVersion>0.11.1</PackageVersion>
+        <PackageVersion>0.11.1-alpha.1</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -37,6 +39,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="..\..\..\Readme.md" Pack="True" PackagePath="" />
+        <None Include="..\..\..\License.md" Pack="True" PackagePath="" />
+        <None Include="..\..\..\images\logo_128x128.png" Pack="True" PackagePath="" />
         <None Include="..\..\..\externals\android\appauth.aar">
             <Link>appauth.aar</Link>
         </None>

@@ -1,3 +1,10 @@
+# IMPORTANT NOTICE
+This is NOT the official package from Xamarin for AppAuth.
+This is a build made by an individual to be able 
+to access the latest Android iOS version of AppAuth(0.11.1 and 1.6.2 respectively)
+and some features not available in older version released by xamarin 
+(EndSession on iOS notably)
+
 # Xamarin Components for OpenID AppAuth (OAuth Client)
 
 OpenID AppAuth is a client SDK for communicating with [OAuth 2.0](https://tools.ietf.org/html/rfc6749) 
@@ -19,3 +26,5 @@ extension to OAuth which was created to secure authorization codes in public
 clients when custom URI scheme redirects are used. The library is friendly to
 other extensions (standard or otherwise) with the ability to handle additional
 parameters in all protocol requests and responses.
+
+

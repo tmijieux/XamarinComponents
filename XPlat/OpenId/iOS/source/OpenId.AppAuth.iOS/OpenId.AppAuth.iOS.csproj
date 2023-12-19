@@ -10,21 +10,22 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageId>Xamarin.OpenId.AppAuth.iOS</PackageId>
+        <PackageId>TMijieux.Xamarin.OpenId.AppAuth.iOS</PackageId>
         <Title>OpenID AppAuth (OAuth Client) for iOS</Title>
         <PackageDescription>
             AppAuth for iOS is a client SDK for communicating with OAuth 2.0 and OpenID Connect providers.
             It strives to directly map the requests and responses of those specifications, while following the idiomatic style of the implementation language.
             In addition to mapping the raw protocol flows, convenience methods are available to assist with common tasks like performing an action with fresh tokens.
         </PackageDescription>
-        <Authors>Microsoft</Authors>
+        <Authors>Microsoft, Thomas Mijieux</Authors>
         <Owners>Microsoft</Owners>
         <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
-        <PackageIconUrl>https://raw.githubusercontent.com/xamarin/XamarinComponents/master/XPlat/OpenId/images/logo_128x128.png</PackageIconUrl>
-        <PackageProjectUrl>https://go.microsoft.com/fwlink/?linkid=864982</PackageProjectUrl>
-        <PackageLicenseUrl>https://go.microsoft.com/fwlink/?linkid=864984</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/tmijieux/XamarinComponents/tree/main/XPlat/OpenId</PackageProjectUrl>
+        <PackageLicenseFile>License.md</PackageLicenseFile>
+        <PackageReadmeFile>Readme.md</PackageReadmeFile>
+        <PackageIcon>logo_128x128.png</PackageIcon>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <PackageVersion>1.6.2</PackageVersion>
+        <PackageVersion>1.6.2-alpha.1</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -51,7 +52,10 @@
           <ForceLoad>True</ForceLoad>
           <Frameworks>SafariServices</Frameworks>
         </NativeReference>
+        <None Include="..\..\..\Readme.md" Pack="True" PackagePath="" />
         <None Include="..\..\..\External-Dependency-Info.txt" Pack="True" PackagePath="THIRD-PARTY-NOTICES.txt" />
+        <None Include="..\..\..\License.md" Pack="True" PackagePath="" />
+        <None Include="..\..\..\images\logo_128x128.png" Pack="True" PackagePath="" />
     </ItemGroup>
 
     <ItemGroup>
