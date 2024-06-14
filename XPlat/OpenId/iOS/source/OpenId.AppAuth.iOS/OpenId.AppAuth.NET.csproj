@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0-ios</TargetFrameworks>
+    <TargetFrameworks>net7.0-ios</TargetFrameworks>
     <IsBindingProject>true</IsBindingProject>
     <ImplicitUsings>true</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>TMijieux.Xamarin.OpenId.AppAuth.iOS</PackageId>
+    <PackageId>TMijieux.NET.OpenId.AppAuth.iOS</PackageId>
     <Title>OpenID AppAuth (OAuth Client) for iOS</Title>
     <PackageDescription>
       AppAuth for iOS is a client SDK for communicating with OAuth 2.0 and OpenID Connect providers.

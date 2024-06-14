@@ -152,6 +152,18 @@ Task("nuget-ios")
 			FileName = "./output/nuget-ios.binlog"
 		};
 	});
+	MSBuild("./iOS/source/OpenId.AppAuth.iOS/OpenId.AppAuth.NET.csproj", c => {
+		c.Configuration = "Release";
+		c.Targets.Clear();
+		c.Targets.Add("Pack");
+		c.Properties.Add("PackageOutputPath", new [] { MakeAbsolute(new FilePath("./output")).FullPath });
+		c.Properties.Add("PackageRequireLicenseAcceptance", new [] { "true" });
+		c.Properties.Add("DesignTimeBuild", new [] { "false" });
+		c.BinaryLogger = new MSBuildBinaryLogSettings {
+			Enabled = true,
+			FileName = "./output/nuget-ios.binlog"
+		};
+	});
 });
 
 Task("nuget-android")
