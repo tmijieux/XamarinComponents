@@ -9,7 +9,7 @@ var ANDROID_VERSION = "0.11.1";
 var ANDROID_NUGET_VERSION = "0.11.1-alpha.1";
 
 var IOS_VERSION = "1.6.2";
-var IOS_NUGET_VERSION = "1.6.2-alpha.2";
+var IOS_NUGET_VERSION = "1.6.2-alpha.4";
 
 var AAR_URL = $"https://repo1.maven.org/maven2/net/openid/appauth/{ANDROID_VERSION}/appauth-{ANDROID_VERSION}.aar";
 
@@ -38,55 +38,73 @@ Task("externals-ios")
 		Scheme = "AppAuth",
                 Archive = true,
                 ArchivePath = "./externals/ios/archives/my_archive_device.xcarchive",
-		Sdk = "iphoneos",
+		Destination = new Dictionary<string,string> {
+                  {"generic/platform","iOS"}
+                },
 		Configuration = "Release",
                 SkipUnavailableActions = false,
                 BuildSettings=  new Dictionary<string,string> {
                     {"SKIP_INSTALL","NO"}
                 },
 	});
+	//XCodeBuild(new XCodeBuildSettings {
+        //        Clean=true,
+	//	Project = "./externals/ios/Pods/Pods.xcodeproj",
+	//	Scheme = "AppAuth",
+        //        Archive = true,
+        //        ArchivePath = "./externals/ios/archives/my_archive_simulators_xamarin.xcarchive",
+	//	Sdk = "iphonesimulator",
+	//	Configuration = "Release",
+        //        SkipUnavailableActions = false,
+        //        BuildSettings=  new Dictionary<string,string> {
+        //            {"SKIP_INSTALL","NO"},
+        //            {"ONLY_ACTIVE_ARCH","NO"},
+        //            {"ARCHS","x86_64"},
+        //        },
+	//});
 	XCodeBuild(new XCodeBuildSettings {
                 Clean=true,
 		Project = "./externals/ios/Pods/Pods.xcodeproj",
 		Scheme = "AppAuth",
                 Archive = true,
-                ArchivePath = "./externals/ios/archives/my_archive_simulators.xcarchive",
-		Sdk = "iphonesimulator",
-		Configuration = "Release",
+                ArchivePath = "./externals/ios/archives/my_archive_simulators_net.xcarchive",
+		Destination = new Dictionary<string,string> {
+                  {"\"generic/platform","iOS Simulator\""}
+                },
+		Configuration = "Debug",
                 SkipUnavailableActions = false,
                 BuildSettings=  new Dictionary<string,string> {
                     {"SKIP_INSTALL","NO"},
-                    {"ONLY_ACTIVE_ARCH","NO"},
-                    {"ARCHS","x86_64"},
                 },
 	});
 
         // https://developer.apple.com/documentation/xcode/creating-a-multi-platform-binary-framework-bundle
         // says: Avoid using tools such as lipo to combine architecture slices built for iOS and iOS Simulator into a single binary. 
 
-        var lipoExitCode = StartProcess("lipo", new ProcessSettings {
-            Arguments = new ProcessArgumentBuilder()
-                .Append("-create")
-                .Append("./externals/ios/archives/my_archive_device.xcarchive/Products/usr/local/lib/libAppAuth.a")
-                .Append("./externals/ios/archives/my_archive_simulators.xcarchive/Products/usr/local/lib/libAppAuth.a")
-                .Append("-output").Append("./externals/ios/libAppAuth.a")
-                });
-        if (lipoExitCode != 0) {
-            throw new Exception($"lipo failed with exit code {lipoExitCode}");
-        }
-        //StartProcess("xcodebuild", new ProcessSettings {
-        //    Arguments = new ProcessArgumentBuilder()
-        //        .Append("-create-xcframework")
-        //        .Append("-archive").Append("./externals/ios/archives/my_archive_device.xcarchive")
-        //        .Append("-library").Append("libAppAuth.a")
-        //        .Append("-archive").Append("./externals/ios/archives/my_archive_simulators.xcarchive")
-        //        .Append("-library").Append("libAppAuth.a")
-        //        .Append("-output").Append("./externals/ios/frameworks/AppAuth.xcframework")
-        //        });
+        // var lipoExitCode = StartProcess("lipo", new ProcessSettings {
+        //     Arguments = new ProcessArgumentBuilder()
+        //         .Append("-create")
+        //         .Append("./externals/ios/archives/my_archive_device.xcarchive/Products/usr/local/lib/libAppAuth.a")
+        //         .Append("./externals/ios/archives/my_archive_simulators_xamarin.xcarchive/Products/usr/local/lib/libAppAuth.a")
+        //         .Append("-output").Append("./externals/ios/libAppAuth.a")
+        // });
+        // if (lipoExitCode != 0) {
+        //     throw new Exception($"lipo failed with exit code {lipoExitCode}");
+        // }
 
+        StartProcess("xcodebuild", new ProcessSettings {
+            Arguments = new ProcessArgumentBuilder()
+                .Append("-create-xcframework")
+                .Append("-archive").Append("./externals/ios/archives/my_archive_device.xcarchive")
+                .Append("-library").Append("libAppAuth.a")
+                .Append("-archive").Append("./externals/ios/archives/my_archive_simulators_net.xcarchive")
+                .Append("-library").Append("libAppAuth.a")
+                .Append("-output").Append("./externals/ios/frameworks/AppAuth.xcframework")
+        });
 
 
 	XmlPoke("./iOS/source/OpenId.AppAuth.iOS/OpenId.AppAuth.iOS.csproj", "/Project/PropertyGroup/PackageVersion", IOS_NUGET_VERSION);
+	XmlPoke("./iOS/source/OpenId.AppAuth.iOS/OpenId.AppAuth.NET.csproj", "/Project/PropertyGroup/PackageVersion", IOS_NUGET_VERSION);
 });
 
 Task("externals-android")
@@ -116,6 +134,10 @@ Task("libs-ios")
 			FileName = "./output/libs-ios.binlog"
 		};
 	});
+	DotNetBuild("./iOS/source/OpenId.AppAuth.iOS/OpenId.AppAuth.NET.csproj", new DotNetBuildSettings {
+		Configuration = "Release",
+            }
+	);
 });
 
 Task("libs-android")
@@ -152,18 +174,17 @@ Task("nuget-ios")
 			FileName = "./output/nuget-ios.binlog"
 		};
 	});
-	MSBuild("./iOS/source/OpenId.AppAuth.iOS/OpenId.AppAuth.NET.csproj", c => {
-		c.Configuration = "Release";
-		c.Targets.Clear();
-		c.Targets.Add("Pack");
-		c.Properties.Add("PackageOutputPath", new [] { MakeAbsolute(new FilePath("./output")).FullPath });
-		c.Properties.Add("PackageRequireLicenseAcceptance", new [] { "true" });
-		c.Properties.Add("DesignTimeBuild", new [] { "false" });
-		c.BinaryLogger = new MSBuildBinaryLogSettings {
-			Enabled = true,
-			FileName = "./output/nuget-ios.binlog"
-		};
-	});
+
+        var settings = new DotNetMSBuildSettings();
+        settings.SetConfiguration("Release");
+        settings.Targets.Clear();
+        settings.Targets.Add("Pack");
+
+	DotNetBuild("./iOS/source/OpenId.AppAuth.iOS/OpenId.AppAuth.NET.csproj", new DotNetBuildSettings{
+            Configuration="Release",
+            MSBuildSettings=settings,
+
+        });
 });
 
 Task("nuget-android")

@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0-ios</TargetFrameworks>
+    <TargetFramework>net8.0-ios</TargetFramework>
     <IsBindingProject>true</IsBindingProject>
     <ImplicitUsings>true</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -24,7 +24,7 @@
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
     <PackageIcon>logo_128x128.png</PackageIcon>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageVersion>1.6.2-alpha.1</PackageVersion>
+    <PackageVersion>1.6.2-alpha.4</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,23 +34,28 @@
     <Compile Remove="*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+      <None Include="TMijieux.NET.OpenId.AppAuth.iOS.targets" Pack="True" PackagePath="build\net8.0-ios17.2"/>
+  </ItemGroup>
 
-  <!-- <ItemGroup>
-       <NativeReference Include="..\..\..\externals\ios\frameworks\AppAuth.xcframework">
-       <Kind>Framework</Kind>
+  <ItemGroup>
+    <NativeReference Include="..\..\..\externals\ios\frameworks\AppAuth.xcframework">
+       <Kind>Static</Kind>
        <SmartLink>False</SmartLink>
        <ForceLoad>True</ForceLoad>
        <Frameworks>SafariServices</Frameworks>
-       </NativeReference>
-       <None Include="..\..\..\External-Dependency-Info.txt" Pack="True" PackagePath="THIRD-PARTY-NOTICES.txt" />
-       </ItemGroup> -->
-  <ItemGroup>
+   </NativeReference>
+  </ItemGroup>
+  <!-- <ItemGroup>
     <NativeReference Include="..\..\..\externals\ios\libAppAuth.a">
       <Kind>Static</Kind>
       <SmartLink>False</SmartLink>
       <ForceLoad>True</ForceLoad>
       <Frameworks>SafariServices</Frameworks>
     </NativeReference>
+  </ItemGroup> -->
+
+  <ItemGroup>
     <None Include="..\..\..\Readme.md" Pack="True" PackagePath="" />
     <None Include="..\..\..\External-Dependency-Info.txt" Pack="True" PackagePath="THIRD-PARTY-NOTICES.txt" />
     <None Include="..\..\..\License.md" Pack="True" PackagePath="" />
