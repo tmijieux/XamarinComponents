@@ -403,12 +403,12 @@ namespace OpenId.AppAuth
 
         // @property (readonly, nonatomic) NSDictionary<NSString *,NSObject<NSCopying> *> * _Nullable additionalParameters;
         [NullAllowed, Export ("additionalParameters")]
-        NSDictionary<NSString, NSCopying> AdditionalParameters { get; }
+        NSDictionary<NSString, INSCopying> AdditionalParameters { get; }
 
         // -(instancetype _Nonnull)initWithRequest:(OIDAuthorizationRequest * _Nonnull)request parameters:(NSDictionary<NSString *,NSObject<NSCopying> *> * _Nonnull)parameters __attribute__((objc_designated_initializer));
         [Export ("initWithRequest:parameters:")]
         [DesignatedInitializer]
-        NativeHandle Constructor (AuthorizationRequest request, NSDictionary<NSString, NSCopying> parameters);
+        NativeHandle Constructor (AuthorizationRequest request, NSDictionary<NSString, INSCopying> parameters);
 
         // -(OIDTokenRequest * _Nullable)tokenExchangeRequest;
         [NullAllowed, Export ("tokenExchangeRequest")]
@@ -842,12 +842,12 @@ namespace OpenId.AppAuth
 
         // @property (readonly, nonatomic) NSDictionary<NSString *,NSObject<NSCopying> *> * _Nullable additionalParameters;
         [NullAllowed, Export ("additionalParameters")]
-        NSDictionary<NSString, NSCopying> AdditionalParameters { get; }
+        NSDictionary<NSString, INSCopying> AdditionalParameters { get; }
 
         // -(instancetype _Nonnull)initWithRequest:(OIDRegistrationRequest * _Nonnull)request parameters:(NSDictionary<NSString *,NSObject<NSCopying> *> * _Nonnull)parameters __attribute__((objc_designated_initializer));
         [Export ("initWithRequest:parameters:")]
         [DesignatedInitializer]
-        NativeHandle Constructor (RegistrationRequest request, NSDictionary<NSString, NSCopying> parameters);
+        NativeHandle Constructor (RegistrationRequest request, NSDictionary<NSString, INSCopying> parameters);
     }
 
     // @interface OIDScopeUtilities : NSObject

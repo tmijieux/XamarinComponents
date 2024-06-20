@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net8.0-ios</TargetFramework>
     <IsBindingProject>true</IsBindingProject>
-    <ImplicitUsings>true</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <ImplicitUsings>false</ImplicitUsings>
+    <Nullable>disable</Nullable>
     <RootNamespace>OpenId.AppAuth</RootNamespace>
     <AssemblyName>OpenId.AppAuth.iOS</AssemblyName>
   </PropertyGroup>
@@ -24,7 +24,7 @@
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
     <PackageIcon>logo_128x128.png</PackageIcon>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageVersion>1.6.2-alpha.4</PackageVersion>
+    <PackageVersion>1.6.2-alpha.5</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-      <None Include="TMijieux.NET.OpenId.AppAuth.iOS.targets" Pack="True" PackagePath="build\net8.0-ios17.2"/>
+      <None Include="TMijieux.NET.OpenId.AppAuth.iOS.targets" Pack="True" PackagePath="build\net8.0-ios17.2" />
   </ItemGroup>
 
   <ItemGroup>

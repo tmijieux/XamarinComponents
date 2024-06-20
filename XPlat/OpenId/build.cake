@@ -9,7 +9,7 @@ var ANDROID_VERSION = "0.11.1";
 var ANDROID_NUGET_VERSION = "0.11.1-alpha.1";
 
 var IOS_VERSION = "1.6.2";
-var IOS_NUGET_VERSION = "1.6.2-alpha.4";
+var IOS_NUGET_VERSION = "1.6.2-alpha.5";
 
 var AAR_URL = $"https://repo1.maven.org/maven2/net/openid/appauth/{ANDROID_VERSION}/appauth-{ANDROID_VERSION}.aar";
 
